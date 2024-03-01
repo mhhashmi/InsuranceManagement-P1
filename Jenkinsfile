@@ -7,7 +7,7 @@ node{
         mavenHome = tool name: 'maven' , type: 'maven'
         mavenCMD = "${mavenHome}/bin/mvn"
         tag="3.0"
-	dockerHubUser="anujsharma1990"
+	dockerHubUser="mhhashmi"
 	containerName="insure-me"
 	httpPort="8081"
     }
@@ -41,6 +41,7 @@ node{
     stage('Docker Image Scan'){
         echo 'Scanning Docker image for vulnerbilities'
         sh "docker build -t ${dockerHubUser}/insure-me:${tag} ."
+        echo "Docker Hub User1: ${dockerHubUser}"
     }   
 	
     stage('Publishing Image to DockerHub'){
@@ -49,6 +50,7 @@ node{
 			sh "docker login -u $dockerUser -p $dockerPassword"
 			sh "docker push $dockerUser/$containerName:$tag"
 			echo "Image push complete"
+                        echo "Docker Hub User2: ${dockerHubUser}"
         } 
     }    
 	
@@ -57,6 +59,7 @@ node{
 		sh "docker pull $dockerHubUser/$containerName:$tag"
 		sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
 		echo "Application started on port: ${httpPort} (http)"
+                echo "Docker Hub User3: ${dockerHubUser}"
 	}
 }
 
